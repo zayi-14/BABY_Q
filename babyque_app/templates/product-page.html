@@ -1,0 +1,159 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<section class="product-page">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="product-slider owl-carousel">
+                    <div class="product-img">
+                        <figure>
+                            <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                        </figure>
+                        {% if request.session.user_id %}
+                        <div class="heart-icon {% if product in shortlisted_products %}shortlisted{% endif %}"
+                            title="{% if product in shortlisted_products %}Remove from Favorites{% else %}Add to Favorites{% endif %}"
+                            data-product-id="{{ product.id }}">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="product-content">
+                    <h2>{{ product.product_name }}</h2>
+                    <div class="pc-meta">
+                        <h5>${{ product.price }}</h5>
+                    </div>
+                    <ul class="p-info">
+                        <h2>Product Description</h2>
+                        <li>{{ product.description }}</li>
+                    </ul>
+                    <div class="product-quantity">
+                        <div class="pro-qty">
+                            <span class="dec qtybtn">-</span>
+                            <input type="text" value="1" id="quantity-input">
+                            <span class="inc qtybtn">+</span>
+                        </div>
+                    </div>
+                    <a href="#" class="primary-btn pc-btn">Add to cart</a>
+                    <div id="cart-message" style="display:none; color: green;">Item added to cart!</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Related Product Section Begin -->
+<section class="related-product spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="section-title">
+                    <h2>Related Products</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for related_product in related_products %}
+            <div class="col-lg-3 col-sm-6">
+                <div class="single-product-item">
+                    <figure>
+                        <a href="{% url 'product_detail' related_product.id %}">
+                            <img src="{{ related_product.product_image.url }}" alt="{{ related_product.product_name }}">
+                        </a>
+                    </figure>
+                    <!-- {% if request.session.user_id %}
+                    <div class="heart-icon {% if product in shortlisted_products %}shortlisted{% endif %}"
+                        title="{% if product in shortlisted_products %}Remove from Favorites{% else %}Add to Favorites{% endif %}"
+                        data-product-id="{{ product.id }}">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    {% endif %} -->
+                    <div class="product-text">
+                        <h6>{{ related_product.product_name }}</h6>
+                        <p>${{ related_product.price }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript Section -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const addToCartButton = document.querySelector(".pc-btn");
+        const cartMessage = document.getElementById("cart-message");
+
+        addToCartButton.addEventListener("click", function (event) {
+            event.preventDefault();
+
+            const productId = "{{ product.id }}";
+            const quantityInput = document.getElementById("quantity-input");
+            const quantity = parseInt(quantityInput.value);
+
+            fetch("{% url 'add_to_cart' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ product_id: productId, quantity: quantity })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    cartMessage.style.display = "block";
+                    cartMessage.innerText = data.message;
+                    setTimeout(() => cartMessage.style.display = "none", 2000);
+
+                    if (data.status === 'success') {
+                        // Optionally update the cart icon or count
+                    }
+                });
+        });
+
+        // Increment/Decrement Quantity
+        var quantityInput = document.getElementById("quantity-input");
+        document.querySelector(".inc").addEventListener("click", function () {
+            var currentVal = parseInt(quantityInput.value);
+            if (!isNaN(currentVal)) {
+                quantityInput.value = currentVal + 1;
+            }
+        });
+
+        document.querySelector(".dec").addEventListener("click", function () {
+            var currentVal = parseInt(quantityInput.value);
+            if (!isNaN(currentVal) && currentVal > 1) {
+                quantityInput.value = currentVal - 1;
+            }
+        });
+
+        // Shortlist Functionality
+        // document.querySelectorAll(".heart-icon").forEach(function (icon) {
+        //     icon.addEventListener("click", function () {
+        //         var productId = this.getAttribute("data-product-id");
+
+        //         fetch("{% url 'add_to_shortlist' %}", {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-CSRFToken': '{{ csrf_token }}'
+        //             },
+        //             body: JSON.stringify({ product_id: productId })
+        //         })
+        //             .then(response => response.json())
+        //             .then(data => {
+        //                 alert(data.message);
+        //                 if (data.status === 'success') {
+        //                     this.classList.add('shortlisted');
+        //                 } else if (data.status === 'removed') {
+        //                     this.classList.remove('shortlisted');
+        //                 }
+        //             });
+        //     });
+        // });
+    });
+</script>
+{% endblock main %}

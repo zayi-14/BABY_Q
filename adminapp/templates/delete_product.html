@@ -1,0 +1,64 @@
+{% extends 'index1.html' %}
+{% load static %}
+{% block main %}
+<style>
+    /* delete_product.css */
+    .product-delete-container {
+        width: 300px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    .product-delete-container h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-delete:hover {
+        background-color: #c82333;
+    }
+
+    .btn-cancel {
+        display: inline-block;
+        padding: 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        background-color: #007bff;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background-color: #0056b3;
+    }
+</style>
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="product-delete-container">
+                    <h2>Are you sure you want to delete the product "{{ product.product_name }}"?</h2>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-delete">Delete</button>
+                        <a href="{% url 'product_list' %}" class="btn-cancel">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

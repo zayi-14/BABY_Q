@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="eng">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Yoga Studio Template">
+    <meta name="keywords" content="Yoga, unica, creative, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Babyque</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css?family=Amatic+SC:400,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Css Styles -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/nice-select.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/magnific-popup.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/slicknav.min.css' %}" type="text/css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
+</head>
+
+<body>
+    {% block header %}
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
+
+
+
+    <!-- Header Section Begin -->
+    <header class="header-section">
+        <div class="container-fluid">
+            <div class="inner-header">
+                <div class="logo">
+                    <a href="{% url 'home' %}"><img src="{% static 'img/new_logo1.png' %}" alt="babyq"></a>
+                </div>
+                <div class="header-right">
+                    <div class="search-container">
+                        <input type="text" id="search-input" placeholder="Search here..." class="search-bar-t"
+                            onkeydown="checkEnter(event)">
+                        <img src="{% static 'img/icons/search.png' %}" alt="Search" class="search-trigger"
+                            id="search-icon" onclick="highlightSearch()">
+                    </div>
+                    <a href="{% url 'shortlist_view' %}"><img src="{% static 'img/icons/iheart.png' %}" alt=""></a>
+                    <!-- {% if request.session.user_id %}
+                    <a href="{% url 'profile' %}"><img src="{% static 'img/icons/man.png' %}" alt=""></a>
+                    {% endif %} -->
+                    <a href="{% url 'my_cart' %}">
+                        <img src="{% static 'img/icons/bag.png' %}" alt="">
+                    </a>
+                </div>
+                <div class="user-access">
+                    {% if request.session.user_id %}
+                    <a href="{% url 'logout' %}" class="logout-symbol">
+                        <img src="{% static 'img/icons/logot4.png' %}" alt="Logout">
+                    </a>
+                    {% else %}
+                    <a href="{% url 'register' %}">Register</a>
+                    <a href="{% url 'login' %}" class="in">Sign in</a>
+                    {% endif %}
+                </div>
+                <nav class="main-menu mobile-menu">
+                    <ul>
+                        <li><a class="active" href="/">Home</a></li>
+                        <li>
+                            <a href="#">Categories</a>
+                            <ul class="sub-menu">
+                                {% for category in categories %}
+                                <li><a href="{% url 'product_by_category' category.id %}">{{ category.category_name}}</a></li>
+                                {% empty %}
+                                <li><a href="#">No categories available</a></li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li><a href="{% url 'about' %}">About</a></li>
+                        {% if request.session.user_id %}
+                        {% if order %}
+                        <li><a href="{% url 'order_tracking' %}">Track Order</a></li>
+                        {% else %}
+                        <li><a href="#">No Orders Yet</a></li> <!-- Show if no order exists for the user -->
+                        {% endif %}
+                        {% endif %}
+
+
+
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- Header Info Begin -->
+    <div class="header-info">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="header-item">
+                        <img src="{% static 'img/icons/delivery.png'%}" alt="">
+                        <p>Free shipping on orders over $30 in USA</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-lg-center">
+                    <div class="header-item">
+                        <img src="{% static 'img/icons/voucher.png' %}" alt="">
+                        <p>20% Student Discount</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-left text-xl-right">
+                    <div class="header-item">
+                        <img src="{% static 'img/icons/sales.png'%}" alt="">
+                        <p>30% off on dresses. Use code: 30OFF</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Header Info End -->
+    <!-- Header End -->
+    {% endblock header %}
+    {% block main %}
+
+    <!-- Hero Slider Begin -->
+    <section class="hero-slider">
+        <div class="hero-items owl-carousel">
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/slider-12.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>2019</h1>
+                            <h2>Lookbook.</h2>
+                            <a href="{% url 'about' %}" class="primary-btn bg-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/new_baby_2.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>2019</h1>
+                            <h2>Lookbook.</h2>
+                            <a href="{% url 'about' %}" class="primary-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="single-slider-item set-bg" data-setbg="{% static 'img/new_baby.jpg' %}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h1>2019</h1>
+                            <h2>Lookbook.</h2>
+                            <a href="{% url 'about' %}" class="primary-btn">See More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Hero Slider End -->
+
+    <!-- Features Section Begin -->
+    <section class="features-section spad">
+        <div class="features-ads">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="single-features-ads first">
+                            <img src="{% static 'img/icons/f-delivery.png' %}" alt="">
+                            <h4>Free shipping</h4>
+                            <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal
+                                esuada aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-features-ads second">
+                            <img src="{% static 'img/icons/coin.png'%}" alt="">
+                            <h4>100% Money back </h4>
+                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
+                                aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="single-features-ads">
+                            <img src="{% static 'img/icons/chat.png' %}" alt="">
+                            <h4>Online support 24/7</h4>
+                            <p>Urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vesti bulum mal esuada
+                                aliquet libero viverra cursus. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Features Box -->
+        <div class="features-box">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="single-box-item first-box">
+                                    <img src="{% static 'img/new_arraival.png'%}" alt="">
+                                    <div class="box-text">
+                                        <span class="trend-year">2019 Party</span>
+                                        <h2>Jewelry</h2>
+                                        <span class="trend-alert">Trend Allert</span>
+                                        <!-- <a href="#" class="primary-btn">See More</a> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="single-box-item second-box">
+                                    <img src="{% static 'img/foot3.png' %}" alt="">
+                                    <div class="box-text">
+                                        <span class="trend-year">2019 Trend</span>
+                                        <h2>Footwear</h2>
+                                        <span class="trend-alert">Bold & Black</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="single-box-item large-box">
+                            <img src="{% static 'img/dress_hanging1.jpeg' %}" alt="">
+                            <div class="box-text">
+                                <span class="trend-year">2019 Party</span>
+                                <h2>Collection</h2>
+                                <div class="trend-alert">Trend Allert</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Features Section End -->
+
+    <!-- Latest Product Begin -->
+    <section class="latest-products spad">
+        <div class="container">
+            <!-- Product Filter -->
+            <div class="product-filter">
+                <div class="row">
+                    <div class="col-lg-12 text-center">
+                        <div class="section-title">
+                            <h2>Latest Products</h2>
+                        </div>
+                        <ul class="product-controls">
+                            <li data-filter="*" class="filter-category">All</li>
+                            {% for category in categories %}
+                            <li data-filter=".{{ category.category_name|lower }}" class="filter-category">{{category.category_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product List -->
+            <div class="row" id="product-list">
+                {% for product in products|slice:":8" %} <!-- Limit initial display to 8 products -->
+                <div class="col-lg-3 col-sm-6 mix {{ product.category.category_name|lower }}">
+                    <div class="single-product-item">
+                        <figure>
+                            <a href="{% url 'product_detail' product.id %}">
+                                <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                            </a>
+                            {% if request.session.user_id %}
+                            <div class="heart-icon {% if product in shortlisted_products %}shortlisted{% endif %}"
+                                title="{% if product in shortlisted_products %}Remove from Favorites{% else %}Add to Favorites{% endif %}"
+                                data-product-id="{{ product.id }}">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            {% endif %}
+                        </figure>
+                        <div class="product-text">
+                            <h6>{{ product.product_name }}</h6>
+                            <p>${{ product.price }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- See More Button -->
+            {% if products|length > 8 %}
+            <div class="col-lg-12 text-center mt-4">
+                <a href="{% url 'categories' %}" class="btn">See More</a>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    <!-- Latest Product End -->
+
+    <!-- Lookbok Section Begin -->
+    <section class="lookbok-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4 offset-lg-1">
+                    <div class="lookbok-left">
+                        <div class="section-title">
+                            <h2>2019 <br />#lookbook</h2>
+                        </div>
+                        <p>Fusce urna quam, euismod sit amet mollis quis, vestibulum quis velit. Vestibulum malesuada
+                            aliquet libero viverra cursus. Aliquam erat volutpat. Morbi id dictum quam, ut commodo
+                            lorem. In at nisi nec arcu porttitor aliquet vitae at dui. Sed sollicitudin nulla non leo
+                            viverra scelerisque. Phasellus facilisis lobortis metus, sit amet viverra lectus finibus ac.
+                            Aenean non felis dapibus, placerat libero auctor, ornare ante. Morbi quis ex eleifend,
+                            sodales nulla vitae, scelerisque ante. Nunc id vulputate dui. Suspendisse consectetur rutrum
+                            metus nec scelerisque. s</p>
+                        <a href="{% url 'about' %}" class="primary-btn look-btn">See More</a>
+                    </div>
+                </div>
+                <div class="col-lg-5 offset-lg-1">
+                    <div class="lookbok-pic">
+                        <img src="{% static 'img/fashion_baby2.jpeg' %}" alt="">
+                        <div class="pic-text">fashion</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Lookbok Section End -->
+
+    <!-- Logo Section Begin -->
+    <div class="logo-section spad">
+        <div class="logo-items owl-carousel">
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-1.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-2.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-3.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-4.png' %}" alt="">
+            </div>
+            <div class="logo-item">
+                <img src="{% static 'img/logos/logo-5.png' %}" alt="">
+            </div>
+        </div>
+    </div>
+    <!-- Logo Section End -->
+    {% endblock main %}
+
+    <!-- Footer Section Begin -->
+    <footer class="footer-section spad">
+        <div class="container">
+            <div class="newslatter-form">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form action="#">
+                            <input type="text" placeholder="Your email address">
+                            <button type="submit">Subscribe to our newsletter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-widget">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>About us</h4>
+                            <ul>
+                                <li>About Us</li>
+                                <li>Community</li>
+                                <li>Jobs</li>
+                                <li>Shipping</li>
+                                <li>Contact Us</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Customer Care</h4>
+                            <ul>
+                                <li>Search</li>
+                                <li>Privacy Policy</li>
+                                <li>2019 Lookbook</li>
+                                <li>Shipping & Delivery</li>
+                                <li>Gallery</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Our Services</h4>
+                            <ul>
+                                <li>Free Shipping</li>
+                                <li>Free Returnes</li>
+                                <li>Our Franchising</li>
+                                <li>Terms and conditions</li>
+                                <li>Privacy Policy</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="single-footer-widget">
+                            <h4>Information</h4>
+                            <ul>
+                                <li>Payment methods</li>
+                                <li>Times and shipping costs</li>
+                                <li>Product Returns</li>
+                                <li>Shipping methods</li>
+                                <li>Conformity of the products</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="social-links-warp">
+            <div class="container">
+                <div class="social-links">
+                    <a href="" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+                    <a href="" class="pinterest"><i class="fa fa-pinterest"></i><span>pinterest</span></a>
+                    <a href="" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+                    <a href="" class="twitter"><i class="fa fa-twitter"></i><span>twitter</span></a>
+                    <a href="" class="youtube"><i class="fa fa-youtube"></i><span>youtube</span></a>
+                    <a href="" class="tumblr"><i class="fa fa-tumblr-square"></i><span>tumblr</span></a>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+    <!-- Footer Section End -->
+
+    <!-- Js Plugins -->
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Heart Icon Toggle
+            document.querySelectorAll(".heart-icon").forEach(function (icon) {
+                icon.addEventListener("click", function () {
+                    const productId = this.getAttribute("data-product-id");
+
+                    fetch("{% url 'add_to_shortlist' %}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({ product_id: productId })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            alert(data.message);
+                            if (data.status === 'success') {
+                                this.classList.add('shortlisted');
+                            } else if (data.status === 'removed') {
+                                this.classList.remove('shortlisted');
+                            }
+                        });
+                });
+            });
+
+            // Category Filter Logic
+            document.querySelectorAll('.product-controls li').forEach(function (filterItem) {
+                filterItem.addEventListener('click', function () {
+                    const filterValue = this.getAttribute('data-filter');
+                    const items = document.querySelectorAll('#product-list .mix');
+
+                    items.forEach(function (item) {
+                        if (filterValue === '*' || item.classList.contains(filterValue.slice(1))) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        document.querySelectorAll('.heart-icon').forEach(item => {
+            item.addEventListener('click', event => {
+                // Toggle the heart icon
+                item.querySelector('i').classList.toggle('fas');
+                item.querySelector('i').classList.toggle('far');
+            });
+        });
+    </script>
+    <script>
+        // Function to check if "Enter" key was pressed
+        function checkEnter(event) {
+            if (event.key === "Enter") {
+                highlightSearch();
+            }
+        }
+
+        // Function to highlight matching text
+        function highlightSearch() {
+            // Clear previous highlights
+            document.querySelectorAll('.highlight').forEach(el => {
+                el.outerHTML = el.innerHTML; // Remove highlight
+            });
+
+            const searchText = document.getElementById('search-input').value.trim().toLowerCase();
+            if (!searchText) return; // Exit if search input is empty
+
+            // Escape special characters for regex
+            const escapedText = searchText.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const regex = new RegExp(`(${escapedText})`, 'gi'); // Create regex for search term
+
+            // Start highlighting text nodes in the body
+            highlightTextNodes(document.body, regex);
+        }
+
+        // Function to recursively highlight matching text nodes
+        function highlightTextNodes(node, regex) {
+            if (node.nodeType === Node.TEXT_NODE) {
+                const text = node.nodeValue.trim();
+                if (regex.test(text)) {
+                    // Wrap matching text with <span class="highlight"> tag
+                    const span = document.createElement('span');
+                    span.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+                    node.parentNode.replaceChild(span, node); // Replace text node with highlighted span
+                }
+            } else {
+                // Recursively check child nodes
+                node.childNodes.forEach(childNode => highlightTextNodes(childNode, regex));
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static 'js/jquery.slicknav.js' %}"></script>
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'js/mixitup.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

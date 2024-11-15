@@ -1,0 +1,135 @@
+{% extends 'index1.html' %}
+{% load static %}
+{% block main %}
+<style>
+    .category-table-container {
+    width: 80%;
+    margin: 50px auto;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.category-table-container h2 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-table th, .category-table td {
+    padding: 12px 15px;
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+}
+
+.category-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.category-table td {
+    color: #333;
+    font-size: 15px;
+}
+
+.category-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.category-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.btn-edit, .btn-delete {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-edit {
+    background-color: #28a745;
+    margin-right: 10px;
+}
+
+.btn-edit:hover {
+    background-color: #218838;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .category-table-container {
+        width: 95%;
+    }
+
+    .category-table th, .category-table td {
+        font-size: 14px;
+        padding: 10px 8px;
+    }
+}
+
+</style>
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="category-table-container">
+                    <h2>Category List</h2>
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Category Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ category.category_name }}</td>
+                                <td>
+                                    <a href="{% url 'edit_category' category.id %}" class="btn-edit">Edit</a>
+                                    <a href="{% url 'delete_category' category.id %}" class="btn-delete"
+                                        onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">No categories found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

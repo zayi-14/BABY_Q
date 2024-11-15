@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+{% block main %}
+<div class="container">
+    <h1>Order Successful!</h1>
+    <p>Thank you for your order. Your order number is: <strong>{{ order_id }}</strong></p>
+    
+    <h2>Order Details</h2>
+    <ul>
+        {% for item in order_items %}
+            <li>{{ item.product.name }} - Quantity: {{ item.quantity }} - Price: {{ item.product.price }}</li>
+        {% endfor %}
+    </ul>
+
+    <p>Your delivery address: {{ address }}</p>
+    
+    <a href="{% url 'home' %}">Go to Home</a>
+    <!-- <a href="{% url 'order_history' %}">View Order History</a> Optional link to view order history -->
+</div>
+{% endblock %}

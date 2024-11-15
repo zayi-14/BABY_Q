@@ -1,0 +1,84 @@
+{% extends 'index.html' %} <!-- Replace 'index.html' with your base template if different -->
+{% load static %}
+
+{% block main %}
+<style>
+    .confirmation-container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        color: #28a745;
+    }
+
+    p {
+        color: #555;
+        font-size: 1.1em;
+    }
+
+    .order-details {
+        text-align: left;
+        margin-top: 20px;
+    }
+
+    .order-details h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .order-details ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .order-details li {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-details li:last-child {
+        border-bottom: none;
+    }
+
+    .button-container {
+        margin-top: 20px;
+    }
+
+    .button-container a {
+        text-decoration: none;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .button-container a:hover {
+        background-color: #218838;
+    }
+</style>
+
+<h2>Order Confirmation</h2>
+<p>Thank you, {{ order.user.email }}! Your order has been successfully placed.</p>
+<p><strong>Order ID:</strong> {{ order.id }}</p>
+<p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+<p><strong>Status:</strong> {{ order.status }}</p>
+
+<h3>Order Items</h3>
+<ul>
+    {% for item in order_items %}
+    <li>{{ item.product.product_name }} - Quantity: {{ item.quantity }} - ₹{{ item.price }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'order_tracking' %}">Track Your Order</a>
+
+{% endblock main %}

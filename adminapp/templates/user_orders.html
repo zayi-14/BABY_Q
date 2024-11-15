@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>User Orders</h1>
+
+    {% for user, orders in user_orders_data.items %}
+        <div class="user-section">
+            <h2>{{ user.username }}</h2>
+            <div class="orders">
+                {% for order_info in orders %}
+                    <div class="order">
+                        <h3>Order ID: {{ order_info.order.id }}</h3>
+                        <p>Status: {{ order_info.order.status }}</p>
+                        <ul class="order-items">
+                            {% for item in order_info.items %}
+                                <li>{{ item.product.name }} - Quantity: {{ item.quantity }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

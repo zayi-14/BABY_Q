@@ -1,0 +1,159 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<style>
+    .babyque-about-section {
+        padding: 70px 0;
+        background-color: #f9fafc;
+    }
+
+    .babyque-title-container {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .babyque-title h2 {
+        font-size: 38px;
+        color: #333;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .babyque-title p {
+        font-size: 18px;
+        color: #777;
+    }
+
+    .babyque-content-container {
+        max-width: 850px;
+        margin: 0 auto;
+        font-size: 17px;
+        line-height: 1.8;
+        color: #444;
+    }
+
+    .babyque-content-container h3 {
+        color: #333;
+        margin-top: 30px;
+        font-size: 26px;
+        font-weight: bold;
+    }
+
+    .babyque-content-container ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .babyque-content-container ul li {
+        background: #f5f5f5;
+        margin: 12px 0;
+        padding: 12px;
+        border-radius: 6px;
+        padding-left: 45px;
+        position: relative;
+    }
+
+    .babyque-content-container ul li::before {
+        content: '✔';
+        position: absolute;
+        left: 15px;
+        color: #ff6b6b;
+        font-size: 20px;
+    }
+
+    .babyque-cta-section {
+        background-color: #ffecec;
+        padding: 35px;
+        text-align: center;
+        margin-top: 50px;
+        border-radius: 8px;
+    }
+
+    .babyque-cta-section h3 {
+        font-size: 24px;
+        color: #333;
+        margin-bottom: 15px;
+    }
+
+    .babyque-cta-section p {
+        color: #666;
+        margin-bottom: 20px;
+    }
+
+    .babyque-cta-section a {
+        background-color: #ff6b6b;
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .babyque-cta-section a:hover {
+        background-color: #ff8a80;
+    }
+
+    .babyque-image-container {
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    .babyque-image-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+</style>
+
+<!-- About Us Section Begin -->
+<section class="babyque-about-section">
+    <div class="container">
+        <div class="babyque-title-container">
+            <div class="babyque-title">
+                <h2>About Us</h2>
+                <p>Welcome to Babyque!</p>
+            </div>
+        </div>
+
+        <div class="babyque-content-container">
+            <p>At Babyque, we believe that every little one deserves the very best. Founded by passionate parents and caregivers, our mission is to offer high-quality, safe, and stylish baby products that simplify parenting and bring joy to every moment.</p>
+
+            <h3>Our Story</h3>
+            <p>As parents, we understand the joys and challenges of raising a child. From sleepless nights to cherished milestones, we’ve been there. That's why we created a one-stop shop for baby essentials that uphold the highest safety standards while expressing the love and care we have for our children.</p>
+
+            <h3>Our Products</h3>
+            <ul>
+                <li><strong>Safe:</strong> Safety is our highest priority. We carefully select products that are free from harmful chemicals and meet stringent safety guidelines.</li>
+                <li><strong>Stylish:</strong> Functional products can be beautiful too. Our collection combines practicality with modern design, fitting seamlessly into your home.</li>
+                <li><strong>Functional:</strong> Parenting can be hectic, so our products are designed to simplify life with innovative and user-friendly features.</li>
+            </ul>
+
+            <h3>Our Commitment</h3>
+            <p>We are committed to sustainability and ethical practices, collaborating with brands that share our values. Our products benefit not only your baby but also the environment through minimized environmental impact and fair labor practices.</p>
+
+            <h3>Join Our Community</h3>
+            <p>We’re more than a store; we’re a community. Connect with us on social media for parenting tips, inspiration, and a supportive network of parents. We love sharing in your journey!</p>
+
+            <h3>Our Team</h3>
+            <p>Meet our dedicated team of parents and caregivers who work tirelessly to provide you with exceptional baby products and customer service.</p>
+
+            <h3>Our Partners</h3>
+            <p>We partner with trusted brands that share our dedication to quality, safety, and sustainability. Together, we aim to make a positive impact.</p>
+
+            <h3>Thank You!</h3>
+            <p>Thank you for choosing Babyque. We’re honored to be part of your parenting journey!</p>
+        </div>
+
+        <div class="babyque-image-container">
+            <img src="{% static 'img/new_logo1.png' %}" alt="About Us Image">
+        </div>
+
+        <div class="babyque-cta-section">
+            <h3>Ready to Explore?</h3>
+            <p>Discover our curated collection of baby products designed to make parenting easier and more enjoyable.</p>
+            <a href="{% url 'home' %}">Shop Now</a>
+        </div>
+    </div>
+</section>
+<!-- About Us Section End -->
+{% endblock main %}

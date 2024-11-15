@@ -1,0 +1,116 @@
+{% extends 'index1.html' %}
+{% load static %}
+{% block main %}
+<style>
+    /* edit_product.css */
+    .product-form-container {
+        width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-form-container h2 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 20px;
+        font-family: 'Arial', sans-serif;
+    }
+
+    .product-form-container form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .product-form-container form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .product-form-container form .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    .product-form-container form .form-control:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    .product-form-container img {
+        max-width: 100px;
+        /* Limit the size of the product image */
+        margin-top: 10px;
+    }
+
+    .btn-submit {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+        text-align: center;
+    }
+
+    .btn-submit:hover {
+        background-color: #0056b3;
+    }
+</style>
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="product-form-container">
+                    <h2>Edit Product: {{ product.product_name }}</h2>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="id_category">Category</label>
+                            {{ form.category }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_product_name">Product Name</label>
+                            {{ form.product_name }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_product_image">Product Image</label>
+                            {{ form.product_image }}
+                            <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}"
+                                class="product-image">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_age_upto">Age Suitability (Years)</label>
+                            {{ form.age_upto }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_price">Price</label>
+                            {{ form.price }}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_description">Description</label>
+                            {{ form.description }}
+                        </div>
+
+                        <button type="submit" class="btn-submit">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

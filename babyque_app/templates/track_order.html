@@ -1,0 +1,152 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<style>
+    /* General Page Styles */
+    body {
+        background-color: #f4f7f6;
+        font-family: Arial, sans-serif;
+    }
+
+    h2 {
+        text-align: center;
+        margin-top: 20px;
+        color: #333;
+        font-weight: 700;
+        font-size: 2em;
+    }
+
+    /* Order Section Styles */
+    .order-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border-left: 8px solid #838383;
+        transition: transform 0.2s;
+    }
+
+    .order-container:hover {
+        transform: translateY(-5px);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-header p {
+        font-size: 1.1em;
+        margin: 0;
+        color: #444;
+        font-weight: 600;
+    }
+
+    .order p {
+        font-size: 1em;
+        color: #555;
+        margin: 8px 0;
+    }
+
+    .order-info strong {
+        color: #666;
+    }
+
+    .order-status.completed {
+        color: #838383;
+    }
+
+    .order-status.pending {
+        color: #ffc107;
+    }
+
+    .order-status.failed {
+        color: #dc3545;
+    }
+
+    /* Item List Styles */
+    .items-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 15px;
+        border-top: 1px solid #eee;
+        padding-top: 15px;
+    }
+
+    .items-list li {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 10px;
+        background-color: #f9fafc;
+        border-radius: 6px;
+        margin-bottom: 10px;
+        border-left: 3px solid #838383;
+    }
+
+    .item-name {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .item-quantity, .item-price {
+        font-weight: 500;
+        color: #666;
+    }
+
+    /* Divider Style */
+    hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 25px 0;
+    }
+
+    /* No Orders Message */
+    .no-orders {
+        text-align: center;
+        color: #888;
+        font-size: 1.2em;
+        margin-top: 25px;
+        padding: 20px;
+        border-radius: 8px;
+        background-color: #ffffff;
+        max-width: 700px;
+        margin: 20px auto;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<div class="order-page">
+    <h2>Order Tracking</h2>
+    {% if orders %}
+        {% for order in orders %}
+        <div class="order-container">
+            <div class="order-header">
+                <p><strong>Order ID:</strong> {{ order.id }}</p>
+                <p><strong> payment Status:</strong> <span class="order-status {{ order.get_status_display|lower }}">{{ order.get_status_display }}</span></p>
+            </div>
+            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+            <p><strong>Address:</strong> {{ order.address }}</p>
+            <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+
+            <h3>Items</h3>
+            <ul class="items-list">
+                {% for item in order.items.all %}
+                <li>
+                    <span class="item-name">{{ item.product.product_name }}</span>
+                    <span class="item-quantity">Quantity: {{ item.quantity }}</span>
+                    <span class="item-price">₹{{ item.price }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <hr>
+        {% endfor %}
+    {% else %}
+        <p class="no-orders">No orders found.</p>
+    {% endif %}
+</div>
+
+{% endblock main %}

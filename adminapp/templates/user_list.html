@@ -1,0 +1,73 @@
+{% extends 'index1.html' %}
+{% load static %}
+{% block main %}
+<style>
+    /* Custom styles */
+    .action-btn {
+        margin-right: 10px;
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    .blocked {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+<div class="main-container">
+    <div class="pd-ltr-20 xs-pd-20-10">
+        <div class="min-height-200px">
+            <div class="page-header">
+                <div class="container mt-5">
+                    <h2 class="text-center mb-4">User Management</h2>
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Loop through users in your Django view and pass to the template -->
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ forloop.counter }}</td>
+                                <td>{{ user.full_name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone_number }}</td>
+                                <td>
+                                    {% if user.is_blocked %}
+                                        <span class="blocked">Blocked</span>
+                                    {% else %}
+                                        Active
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if user.is_blocked %}
+                                        <!-- Unblock button -->
+                                        <form method="POST" action="{% url 'unblock_user' user.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success action-btn">Unblock</button>
+                                        </form>
+                                    {% else %}
+                                        <!-- Block button -->
+                                        <form method="POST" action="{% url 'block_user' user.id %}" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger action-btn">Block</button>
+                                        </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+{% block main %}
+<section class="shortlist-section spad">
+    <div class="container">
+        <h2>Your Shortlisted Products</h2>
+
+        <div class="row" id="shortlist-products">
+            {% if shortlisted_products %}
+                {% for product in shortlisted_products %}
+                <div class="col-lg-3 col-sm-6 mix all">
+                    <div class="single-product-item">
+                        <figure>
+                            <a href="{% url 'product_detail' product.id %}">
+                                <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                            </a>
+                            <div class="heart-icon shortlisted" title="Remove from Shortlist" data-product-id="{{ product.id }}">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                        </figure>
+                        <div class="product-text">
+                            <h6>{{ product.product_name }}</h6>
+                            <p>${{ product.price }}</p>
+                            <p>for {{ product.age_upto }} years old</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>You have no shortlisted products.</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".heart-icon").forEach(function (icon) {
+            icon.addEventListener("click", function () {
+                var productId = this.getAttribute("data-product-id");
+
+                fetch("{% url 'add_to_shortlist' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'removed') {
+                        this.closest('.single-product-item').remove();
+                    }
+                });
+            });
+        });
+    });
+</script>
+{% endblock main %}

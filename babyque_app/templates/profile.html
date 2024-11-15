@@ -1,0 +1,299 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<section class="babyshop-profile-section">
+    <div class="babyshop-container">
+        <!-- Sidebar Section -->
+        <div class="babyshop-profile-sidebar">
+            <!-- <div class="babyshop-profile-avatar">
+                <img src="{% static 'img/monkey_d_luffy.jpeg' %}" alt="User Avatar">
+                <h3>John Doe</h3>
+                <p>johndoe@example.com</p>
+            </div> -->
+            <ul class="babyshop-profile-menu">
+                <li><a href="#" class="tab-link active" data-target="#personal-info">Personal Info</a></li>
+                <li><a href="#" class="tab-link" data-target="#order-history">Order History</a></li>
+                <!-- <li><a href="#" class="tab-link" data-target="#payment-methods">Payment Methods</a></li> -->
+                <li><a href="#" class="tab-link" data-target="#my-cart">My Cart</a></li> <!-- Updated Link -->
+                <li><a href="#" class="tab-link" data-target="#address-book">Address Book</a></li>
+                <li><a href="#" class="tab-link" data-target="#order-tracking">Track Order</a></li>
+                <!-- <li><a href="#" class="tab-link" data-target="#account-settings">Account Settings</a></li> -->
+                <li><a href="#logout" class="babyshop-logout-btn">Log Out</a></li>
+            </ul>
+        </div>
+
+        <!-- Profile Content Section -->
+        <div class="babyshop-profile-content">
+            <!-- Personal Info Tab -->
+            <div id="personal-info" class="babyshop-profile-tab active">
+                <h2 class="babyshop-h2">Personal Information</h2>
+                <form class="babyshop-form">
+                    <div class="babyshop-form-group">
+                        <label for="name">Full Name:</label>
+                        <input type="text" id="name" value="John Doe">
+                    </div>
+
+                    <div class="babyshop-form-group">
+                        <label for="email">Email Address:</label>
+                        <input type="email" id="email" value="johndoe@example.com">
+                    </div>
+
+                    <div class="babyshop-form-group">
+                        <label for="phone">Phone Number:</label>
+                        <input type="tel" id="phone" value="+123456789">
+                    </div>
+
+                    <div class="babyshop-button-group">
+                        <button type="submit" class="babyshop-button primary">Update Info</button>
+                        <button type="reset" class="babyshop-button secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            <!-- payment section -->
+            <!-- Payment Methods Tab -->
+            <div id="payment-methods" class="babyshop-profile-tab">
+                <h2 class="babyshop-h2">Payment Methods</h2>
+
+                <!-- Existing Payment Methods -->
+                <div class="saved-payment-methods">
+                    <h4>Saved Cards</h4>
+                    <ul class="payment-method-list">
+                        <li>
+                            <div class="card-details">
+                                <img src="{% static 'img/mastercard.jpg' %}" alt="Visa">
+                                <span>**** **** **** 1234</span>
+                                <span class="card-expiry">Exp: 12/25</span>
+                            </div>
+                            <a href="#" class="remove-card-btn">Remove</a>
+                        </li>
+                        <li>
+                            <div class="card-details">
+                                <img src="{% static 'img/paypal.jpg' %}" alt="MasterCard">
+                                <span>**** **** **** 5678</span>
+                                <span class="card-expiry">Exp: 09/24</span>
+                            </div>
+                            <a href="#" class="remove-card-btn">Remove</a>
+                        </li>
+                    </ul>
+                </div>
+
+            <!-- Order History Tab -->
+            <div id="order-history" class="babyshop-profile-tab">
+                <section class="order-tracking-section">
+                    <div class="container">
+                        <h2>Order Tracking</h2>
+                        <div class="order-details">
+                            <p><strong>Order ID:</strong> {{ order.id }}</p>
+                            <p><strong>Amount:</strong> ₹{{ order.total_amount }}</p>
+                            <p><strong>Status:</strong> {{ order.get_order_status_display }}</p>
+                            <p><strong>Delivery Address:</strong> {{ order.delivery_address }}</p>
+                            <p><strong>Order Date:</strong> {{ order.created_at }}</p>
+                        </div>
+                
+                        <h3>Ordered Products:</h3>
+                        <ul>
+                            {% for item in order_items %}
+                                <li>{{ item.product.product_name }} (x{{ item.quantity }})</li>
+                            {% endfor %}
+                        </ul>
+                
+                        {% if order.order_status == 'processing' %}
+                            <p class="processing">Your order is being processed. It will be shipped soon.</p>
+                        {% elif order.order_status == 'shipped' %}
+                            <p class="shipped">Your order has been shipped and is on the way.</p>
+                        {% elif order.order_status == 'delivered' %}
+                            <p class="delivered">Your order has been delivered. Thank you for shopping with us!</p>
+                        {% elif order.order_status == 'cancelled' %}
+                            <p class="cancelled">Your order has been cancelled. Please contact support for assistance.</p>
+                        {% endif %}
+                    </div>
+                </section>
+
+            <!-- My Cart Tab -->
+            <div id="my-cart" class="babyshop-profile-tab">
+                <section class="cart-section">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h2 class="cart-title">My Cart</h2>
+                                <div class="cart-table">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Product</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
+                                                <th>Total</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for cart_item in cart_items %}
+                                            <tr>
+                                                <td class="cart-item">
+                                                    <div class="cproduct-img">
+                                                        <img src="{{ cart_item.product.product_image.url }}" alt="{{ cart_item.product.product_name }}">
+                                                    </div>
+                                                    <div class="product-name">
+                                                        <h4>{{ cart_item.product.product_name }}</h4>
+                                                    </div>
+                                                </td>
+                                                <td class="price">${{ cart_item.product.price }}</td>
+                                                <td>
+                                                    <div class="product-quantity">
+                                                        <div class="pro-qty">
+                                                            <span class="dec qtybtn">-</span>
+                                                            <input type="text" value="{{ cart_item.quantity }}" data-cart-id="{{ cart_item.id }}" class="quantity-input">
+                                                            <span class="inc qtybtn">+</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="total" data-price="{{ cart_item.product.price }}">${{ cart_item.product.price|floatformat:2 }}</td>
+                                                <td>
+                                                    <a href="#" class="remove-btn" data-cart-id="{{ cart_item.id }}">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="cart-total">
+                                    <h4>Cart Total</h4>
+                                    <ul>
+                                        <li>Subtotal <span id="subtotal">${{ total }}</span></li>
+                                        <li>Total <span id="total">${{ total }}</span></li>
+                                    </ul>
+                                    <a href="{% url 'checkout' %}" class="primary-btn cprimary-btn">Proceed to Checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<!-- Footer Section Begin -->
+
+<!-- Js Plugins -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Initially hide all sections except the first one
+        $('.babyshop-profile-tab').hide(); // Hide all sections
+        $('#personal-info').show(); // Show the first section
+
+        // Handle click events on sidebar links
+        $('.tab-link').click(function (e) {
+            e.preventDefault(); // Prevent default anchor behavior
+
+            // Remove 'active' class from all links and add it to the clicked one
+            $('.tab-link').removeClass('active');
+            $(this).addClass('active');
+
+            // Hide all sections
+            $('.babyshop-profile-tab').hide();
+
+            // Show the target section
+            var target = $(this).data('target');
+            $(target).show();
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        function updateTotal(cartItemRow) {
+            const price = parseFloat(cartItemRow.querySelector('.total').dataset.price);
+            const quantityInput = cartItemRow.querySelector('.quantity-input');
+            const quantity = parseInt(quantityInput.value);
+            const totalCell = cartItemRow.querySelector('.total');
+            const newTotal = (price * quantity).toFixed(2);
+            totalCell.textContent = `$${newTotal}`; // Update total cell
+
+            // Update subtotal and total for the entire cart
+            updateCartTotals();
+        }
+
+        function updateCartTotals() {
+            let subtotal = 0;
+            document.querySelectorAll('.total').forEach(totalCell => {
+                subtotal += parseFloat(totalCell.textContent.replace('$', ''));
+            });
+            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`; // Same as subtotal for now
+        }
+
+        // Handle remove button click
+        document.querySelectorAll('.remove-btn').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const cartId = this.getAttribute('data-cart-id');
+
+                fetch(`/remove_from_cart/${cartId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        location.reload();  // Reload to reflect changes
+                    }
+                });
+            });
+        });
+
+        // Handle quantity update
+        document.querySelectorAll('.qtybtn').forEach(button => {
+            button.addEventListener('click', function () {
+                const cartItemRow = this.closest('tr'); // Get the closest row
+                const input = this.parentElement.querySelector('input');
+                const cartId = input.getAttribute('data-cart-id');
+                let newQuantity = parseInt(input.value);
+
+                if (this.classList.contains('inc')) {
+                    newQuantity += 1;
+                } else if (this.classList.contains('dec') && newQuantity > 1) {
+                    newQuantity -= 1;
+                }
+                input.value = newQuantity;
+
+                // Update the total price for this item
+                updateTotal(cartItemRow);
+
+                fetch(`/update_cart_quantity/${cartId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ quantity: newQuantity })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Optionally reload the page to reflect changes
+                    }
+                });
+            });
+        });
+    });
+</script>
+<!-- <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/jquery.magnific-popup.min.js' %}"></script>
+<script src="{% static 'js/jquery.slicknav.js' %}"></script>
+<script src="{% static 'js/owl.carousel.min.js' %}"></script>
+<script src="{% static 'js/jquery.nice-select.min.js' %}"></script>
+<script src="{% static 'js/mixitup.min.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script> -->
+{% endblock main %}

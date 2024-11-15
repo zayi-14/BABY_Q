@@ -1,0 +1,79 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<section class="latest-products spad">
+    <div class="container">
+        <h2>{{ category.category_name }}</h2>
+
+        <!-- Age Filter Form -->
+        <form method="GET" id="age-filter-form" class="age-filter-form">
+            <label for="age_filter">Filter by Age:</label>
+            <select name="age_filter" id="age_filter" class="custom-age-filter" onchange="document.getElementById('age-filter-form').submit()">
+                <option value="">Select Age</option>
+                {% for age in ages %}
+                    <option value="{{ age }}" {% if request.GET.age_filter == age|stringformat:"s" %}selected{% endif %}>{{ age }}</option>
+                {% endfor %}
+            </select>
+        </form>
+
+        <div class="row" id="product-list">
+            {% for product in products %}
+            <div class="col-lg-3 col-sm-6 mix all {{ product.category.category_name|lower }}">
+                <div class="single-product-item">
+                    <figure>
+                        <a href="{% url 'product_detail' product.id %}">
+                            <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}">
+                        </a>
+                        {% if request.session.user_id %}
+                        <div class="heart-icon {% if product in shortlisted_products %}shortlisted{% endif %}" 
+                             title="{% if product in shortlisted_products %}Remove from Favorites{% else %}Add to Favorites{% endif %}" 
+                             data-product-id="{{ product.id }}">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        {% endif %}
+                        {% if product.is_new %}
+                        <div class="p-status">new</div>
+                        {% elif product.is_on_sale %}
+                        <div class="p-status sale">sale</div>
+                        {% endif %}
+                    </figure>
+                    <div class="product-text">
+                        <h6>{{ product.product_name }}</h6>
+                        <p>${{ product.price }}</p>
+                        <p>for {{ product.age_upto }} years old</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".heart-icon").forEach(function (icon) {
+            icon.addEventListener("click", function () {
+                var productId = this.getAttribute("data-product-id");
+
+                fetch("{% url 'add_to_shortlist' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ product_id: productId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === 'success') {
+                        this.classList.add('shortlisted');
+                    } else if (data.status === 'removed') {
+                        this.classList.remove('shortlisted');
+                    }
+                });
+            });
+        });
+    });
+</script> -->
+{% endblock main %}

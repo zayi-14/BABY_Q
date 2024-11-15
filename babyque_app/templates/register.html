@@ -1,0 +1,80 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<section class="user-registration-section">
+    <div class="registration-form-container">
+        <form class="registration-form" method="POST" action="{% url 'register' %}">
+            {% csrf_token %}
+            <p class="reg-t">Registration</p>
+
+            <!-- Full Name Field -->
+            <div class="form-group">
+                <label for="registration-fullname">Full Name</label>
+                <input type="text" id="registration-fullname" name="full_name" class="registration-input" placeholder="Enter your full name" required>
+            </div>
+            
+            <!-- Email Field -->
+            <div class="form-group">
+                <label for="registration-email">Email Address</label>
+                <input type="email" id="registration-email" name="email" class="registration-input" placeholder="Enter your email" required>
+            </div>
+
+            <!-- Phone Number Field with OTP Request -->
+            <div class="form-group">
+                <label for="registration-phone">Phone Number</label>
+                <div class="phone-otp-container">
+                    <input type="tel" id="registration-phone" name="phone_number" class="registration-input phone-input" placeholder="Enter your phone number" required>
+                    <button type="button" class="rget-otp-btn">Get OTP</button>
+                </div>
+            </div>
+
+            <!-- OTP Field -->
+            <div class="form-group">
+                <label for="registration-otp">Enter OTP</label>
+                <input type="text" id="registration-otp" name="otp" class="registration-input" placeholder="Enter the OTP" required>
+            </div>
+
+            <!-- Register Button -->
+            <button type="submit" class="rsubmit-btn">Register</button>
+            
+            <p class="reg-p">If you are already registered <a href="{% url 'login' %}" class="reg-a">login</a></p>
+        </form>
+    </div>
+</section>
+
+<script>
+    // Handle OTP request via AJAX
+    document.querySelector('.rget-otp-btn').addEventListener('click', function() {
+        const phoneInput = document.querySelector('#registration-phone').value;
+        const emailInput = document.querySelector('#registration-email').value;
+
+        // Check if phone number and email are provided
+        if (phoneInput === '' || emailInput === '') {
+            alert('Please enter both your email and phone number.');
+            return;
+        }
+
+        fetch('{% url "get_otp" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}' // Ensure CSRF token is sent
+            },
+            body: JSON.stringify({ phone_number: phoneInput, email: emailInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('OTP sent successfully!');
+            } else {
+                alert('Error: ' + data.message);  // Show an alert if the email or phone is already registered
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while sending the OTP.');
+        });
+    });
+</script>
+
+{% endblock main %}

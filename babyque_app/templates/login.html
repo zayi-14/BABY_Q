@@ -1,0 +1,100 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<!-- login section -->
+<section class="user-login-section">
+    <div class="login-form-container">
+        <h2 class="login-form-title">Login</h2>
+        <form class="login-form" id="login-form">
+            <div class="form-group">
+                <label for="login-phone-number">Phone Number</label>
+                <div class="phone-otp-container">
+                    <input type="tel" id="login-phone-number" class="login-input phone-input" placeholder="Enter your phone number" required>
+                    <button type="button" class="lget-otp-btn" onclick="sendOtp()">Get OTP</button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="login-otp">Enter OTP</label>
+                <input type="text" id="login-otp" class="login-input" placeholder="Enter the OTP you received" required>
+            </div>
+            <button type="submit" class="lsubmit-btn">Login</button>
+            <p class="log-p">New here? <a href="{% url 'register' %}" class="log-a">Register here</a></p>
+        </form>
+    </div>
+</section>
+
+<script>
+    // Function to send OTP via AJAX
+    function sendOtp() {
+        const phoneInput = document.querySelector('#login-phone-number').value;
+
+        // Check if phone number is provided
+        if (phoneInput === '') {
+            alert('Please enter your phone number.');
+            return;
+        }
+
+        // Make an AJAX request to send the OTP
+        fetch('{% url "send_login_otp" %}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ phone_number: phoneInput })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('OTP sent successfully!');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while sending the OTP.');
+        });
+    }
+
+    // Handle form submission to verify OTP and log in
+    document.querySelector('#login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const phoneInput = document.querySelector('#login-phone-number').value;
+        const otpInput = document.querySelector('#login-otp').value;
+
+        // Check if OTP is entered
+        if (otpInput === '') {
+            alert('Please enter the OTP.');
+            return;
+        }
+
+        // Make an AJAX request to verify the OTP and log in
+        const formData = new FormData();
+        formData.append('phone_number', phoneInput);
+        formData.append('otp', otpInput);
+
+        fetch('{% url "verify_login_otp" %}', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Logged in successfully!');
+                window.location.href = data.redirect_url;  // Redirect to home page
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while logging in.');
+        });
+    });
+</script>
+{% endblock main %}
